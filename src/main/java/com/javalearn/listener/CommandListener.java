@@ -1,14 +1,13 @@
 package com.javalearn.listener;
 
+import com.javalearn.handler.CommandHandler;
 import com.javalearn.handler.HandlerResolver;
 import com.javalearn.handler.HandlerResolverImpl;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +18,7 @@ public class CommandListener {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         HandlerResolver resolver = HandlerResolverImpl.getInstance();
+        CommandHandler handler;
 
         while (true) {
             try {
@@ -38,10 +38,13 @@ public class CommandListener {
                         .filter(i -> !i.startsWith("-") && !i.equals(command))
                         .collect(Collectors.toList());
 
-                resolver.resolve(command).execute(args, options);
+                handler = resolver.resolve(command);
 
-            } catch (NullPointerException e) {
-                System.out.println("There is no such a command");
+                if (handler == null)
+                    System.out.println("There is no such a command");
+                else
+                    handler.execute(args, options);
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
