@@ -3,28 +3,36 @@ package com.javalearn.handler;
 import com.javalearn.enums.Command;
 import com.javalearn.handler.impl.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HandlerResolverImpl implements HandlerResolver {
+
+    private static HandlerResolverImpl instance;
+    private static final Map<String, CommandHandler> COMMAND_HANDLER_MAP = new HashMap<>();
+
+    private HandlerResolverImpl() {
+
+        COMMAND_HANDLER_MAP.put(Command.HELP.getName(), new HelpCommandHandler());
+        COMMAND_HANDLER_MAP.put(Command.CREATE_FILE.getName(), new CreateCommandHandler());
+        COMMAND_HANDLER_MAP.put(Command.WRITE_FILE.getName(), new WriteCommandHandler());
+        COMMAND_HANDLER_MAP.put(Command.DELETE_FILE.getName(), new DeleteCommandHandler());
+        COMMAND_HANDLER_MAP.put(Command.ZIP.getName(), new ZipPackCommandHandler());
+        COMMAND_HANDLER_MAP.put(Command.CP.getName(), new CopyCommandHandler());
+        COMMAND_HANDLER_MAP.put(Command.CAT.getName(), new ConsolePrintCommandHandler());
+    }
+
+    public static HandlerResolverImpl getInstance(){
+
+        if (instance == null){
+            instance = new HandlerResolverImpl();
+        }
+        return instance;
+    }
 
     @Override
     public CommandHandler resolve(String command) {
-        CommandHandler handler = null;
 
-        if (command.equals(Command.HELP.getName())){
-            handler = new HelpCommandHandler();
-        } else if (command.equals(Command.CREATE_FILE.getName())){
-            handler = new CreateCommandHandler();
-        } else if (command.equals(Command.WRITE_FILE.getName())){
-            handler = new WriteCommandHandler();
-        } else if (command.equals(Command.DELETE_FILE.getName())){
-            handler = new DeleteCommandHandler();
-        } else if (command.equals(Command.ZIP.getName())){
-            handler = new ZipPackCommandHandler();
-        } else if (command.equals(Command.CP.getName())){
-            handler = new CopyCommandHandler();
-        } else if (command.equals(Command.CAT.getName())){
-            handler = new ConsolePrintCommandHandler();
-        }
-
-        return handler;
+        return COMMAND_HANDLER_MAP.get(command);
     }
 }

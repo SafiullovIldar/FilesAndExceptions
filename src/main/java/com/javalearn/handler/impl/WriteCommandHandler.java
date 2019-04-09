@@ -27,8 +27,8 @@ public class WriteCommandHandler implements CommandHandler {
         boolean exists = Files.exists(path);
 
         if (exists) {
-            try {
-                FileWriter fileWriter = new FileWriter(filePath, append);
+            try (FileWriter fileWriter = new FileWriter(filePath, append)) {
+
                 String message = args.get(messageIndex);
                 fileWriter.write(message);
                 fileWriter.flush();

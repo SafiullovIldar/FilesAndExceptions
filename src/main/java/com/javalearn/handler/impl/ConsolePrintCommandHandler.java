@@ -15,8 +15,7 @@ public class  ConsolePrintCommandHandler implements CommandHandler {
     public void execute(List<String> args, Set<String> options) {
         File file = new File(args.get(0));
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null){
                 System.out.println(line);

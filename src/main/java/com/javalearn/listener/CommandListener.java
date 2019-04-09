@@ -18,7 +18,7 @@ public class CommandListener {
     public static void run(){
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        HandlerResolver resolver = new HandlerResolverImpl();
+        HandlerResolver resolver = HandlerResolverImpl.getInstance();
 
         while (true) {
             try {
